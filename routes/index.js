@@ -16,7 +16,7 @@ exports.set = function(app) {
 
       ctx.font = '30px impact';
       ctx.rotate(.1);
-      ctx.fillText("awesome!", 50, 100);
+      ctx.fillText(req.path.split("/").join(" "), 50, 100);
 
       var te = ctx.measureText('awesome!');
       ctx.strokestyle = 'rgba(0,0,0,0.5)';
