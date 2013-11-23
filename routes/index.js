@@ -5,22 +5,29 @@ exports.set = function(app) {
   app.get('*', function(req, res) {
     res.setHeader("content-type", "image/png");
 
-    canvas = new Canvas(200, 200)
-    ctx = canvas.getContext('2d');
+    fs.readFile(__dirname+"/../doge.jpeg", function(err, d) {
+      canvas = new Canvas(200, 200)
+      ctx = canvas.getContext('2d');
 
-    ctx.font = '30px impact';
-    ctx.rotate(.1);
-    ctx.fillText("awesome!", 50, 100);
+      img = new Canvas.Image;
+      img.src = d;
 
-    var te = ctx.measureText('awesome!');
-    ctx.strokestyle = 'rgba(0,0,0,0.5)';
-    ctx.beginPath();
-    ctx.lineTo(50, 102);
-    ctx.lineTo(50 + te.width, 102);
-    ctx.stroke();
+      ctx.drawImage(img, 0, 0, 200, 200);
+
+      ctx.font = '30px impact';
+      ctx.rotate(.1);
+      ctx.fillText("awesome!", 50, 100);
+
+      var te = ctx.measureText('awesome!');
+      ctx.strokestyle = 'rgba(0,0,0,0.5)';
+      ctx.beginPath();
+      ctx.lineTo(50, 102);
+      ctx.lineTo(50 + te.width, 102);
+      ctx.stroke();
 
 
-    canvas.pngStream().pipe(res)
+      canvas.pngStream().pipe(res)
+    });
   });
 }
 
