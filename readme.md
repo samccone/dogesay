@@ -5,4 +5,5 @@ dogesay
 
 ## Dev
 ```npm install -g roots@2.1.0beta4```
-```roots watch```
+
+```node app```
