@@ -9,6 +9,7 @@ config =
   lineIndents: [0, .15, .40, .10, 0, .30]
   width: 500
   height: 500
+  fontFamily: "Comic Sans"
 
 module.exports = (req, res) ->
   res.setHeader "content-type", "image/png"
@@ -43,12 +44,12 @@ drawMessage = (messages) ->
   heightStack = 0
 
   messages.forEach (m, i) ->
-    ctx.font = "#{config.fontSize}px Comic Sans"
+    ctx.font = "#{config.fontSize}px #{config.fontFamily}"
     size     = ctx.measureText(m)
     step     = 0
 
     while size.width > canvas.width - config.lineIndents[i]*canvas.width and ++step < config.fontSize
-      ctx.font = "#{config.fontSize - step}px Comic Sans"
+      ctx.font = "#{config.fontSize - step}px #{config.fontFamily}"
       size     = ctx.measureText(m)
 
     ctx.fillText m,
