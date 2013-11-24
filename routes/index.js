@@ -2,6 +2,10 @@ var fs = require('fs');
 var Canvas = require('canvas');
 
 exports.set = function(app) {
+  app.get('/', function(req, res) {
+    res.render('index');
+  });
+
   app.get('*', function(req, res) {
     res.setHeader("content-type", "image/png");
 
