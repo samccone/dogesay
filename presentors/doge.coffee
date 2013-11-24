@@ -3,8 +3,7 @@ Canvas = require 'canvas'
 canvas = null
 ctx    = null
 config = {
-  fontSize: 100,
-  lineHeight: 10
+  fontSize: 100
   wordsPerLine: 2
   lineIndents: [0, .15, .40, .10, 0, .30]
 }
