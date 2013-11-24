@@ -5,6 +5,7 @@ ctx    = null
 config =
   fontSize: 100
   wordsPerLine: 2
+  lineHeight: 0
   lineIndents: [0, .15, .40, .10, 0, .30]
   width: 500
   height: 500
@@ -39,7 +40,7 @@ formatMessage = (message) ->
   formatted
 
 drawMessage = (messages) ->
-  lastHeight = 0
+  heightStack = 0
 
   messages.forEach (m, i) ->
     ctx.font = "#{config.fontSize}px Comic Sans"
@@ -50,5 +51,8 @@ drawMessage = (messages) ->
       ctx.font = "#{config.fontSize - step}px Comic Sans"
       size     = ctx.measureText(m)
 
-    ctx.fillText m, config.lineIndents[i]*canvas.width, size.emHeightAscent + i * lastHeight + config.lineHeight * ++i
-    lastHeight = size.emHeightAscent
+    ctx.fillText m,
+      config.lineIndents[i]*canvas.width,
+      size.emHeightAscent + heightStack + config.lineHeight * ++i
+
+    heightStack += config.fontSize - step
