@@ -27,7 +27,6 @@ module.exports = (req, res) ->
     drawMessage message
     canvas.pngStream().pipe(res)
 
-
 formatMessage = (message) ->
   hold      = []
   formatted = []
