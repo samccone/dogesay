@@ -4,8 +4,9 @@ canvas = null
 ctx    = null
 config = {
   fontSize: 100,
-  wordsPerLine: 3
   lineHeight: 10
+  wordsPerLine: 2
+  lineIndents: [0, .15, .40, .10, 0, .30]
 }
 
 module.exports = (req, res) ->
@@ -20,8 +21,10 @@ module.exports = (req, res) ->
     img.src = d
 
     ctx.drawImage img, 0, 0, 500, 500
+
     drawMessage message
     canvas.pngStream().pipe(res)
+
 
 formatMessage = (message) ->
   hold      = []
@@ -43,9 +46,9 @@ drawMessage = (messages) ->
     size     = ctx.measureText(m)
     step     = 0
 
-    while size.width > canvas.width and ++step < config.fontSize
+    while size.width > canvas.width - config.lineIndents[i]*canvas.width and ++step < config.fontSize
       ctx.font = "#{config.fontSize - step}px Comic Sans"
       size     = ctx.measureText(m)
 
-    ctx.fillText m, 0, size.emHeightAscent + i * lastHeight + config.lineHeight * ++i
+    ctx.fillText m, config.lineIndents[i]*canvas.width, size.emHeightAscent + i * lastHeight + config.lineHeight * ++i
     lastHeight = size.emHeightAscent
