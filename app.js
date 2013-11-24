@@ -1,16 +1,16 @@
+require('coffee-script')
 
 /**
  * Module dependencies.
  */
 
 var express = require('express'),
-    routes  = require('./routes'),
+    routes  = require('./routes/index'),
     http    = require('http'),
     roots   = require('roots-express'),
     assets  = require('connect-assets'),
     path    = require('path');
 
-require('coffee-script');
 
 var app = express();
 roots.add_compiler(assets);
