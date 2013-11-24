@@ -2,24 +2,25 @@ fs     = require 'fs'
 Canvas = require 'canvas'
 canvas = null
 ctx    = null
-config = {
+config =
   fontSize: 100
   wordsPerLine: 2
   lineIndents: [0, .15, .40, .10, 0, .30]
-}
+  width: 500
+  height: 500
 
 module.exports = (req, res) ->
   res.setHeader "content-type", "image/png"
 
   fs.readFile __dirname+"/../doge.jpeg", (err, d) ->
     message = formatMessage(req.path.split("/").slice(1))
-    canvas  = new Canvas(500, 500)
+    canvas  = new Canvas(config.width, config.height)
     ctx     = canvas.getContext('2d')
 
     img     = new Canvas.Image
     img.src = d
 
-    ctx.drawImage img, 0, 0, 500, 500
+    ctx.drawImage img, 0, 0, config.width, config.height
 
     drawMessage message
     canvas.pngStream().pipe(res)
