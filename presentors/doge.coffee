@@ -27,10 +27,16 @@ module.exports = (req, res) ->
     drawMessage message
     canvas.pngStream().pipe(res)
 
+removeExtension = (message) ->
+  l = message.length - 1
+  if ~message[l].indexOf('.')
+    message[l] = message[l].slice(0, message[l].indexOf('.'))
+  message
+
 formatMessage = (message) ->
   hold      = []
   formatted = []
-  message.forEach (w) ->
+  removeExtension(message).forEach (w) ->
     hold.push w
     if hold.length % config.wordsPerLine is 0
       formatted.push(hold.join(" "))
