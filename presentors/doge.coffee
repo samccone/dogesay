@@ -1,5 +1,6 @@
 fs     = require 'fs'
 Canvas = require 'canvas'
+Font   = Canvas.Font
 canvas = null
 ctx    = null
 config =
@@ -9,9 +10,11 @@ config =
   lineIndents: [0, .15, .40, .10, 0, .30]
   width: 500
   height: 500
-  fontFamily: "Comic Sans"
+  fontFamily: "comicSans"
+
 
 module.exports = (req, res) ->
+
   res.setHeader "content-type", "image/png"
 
   fs.readFile __dirname+"/../doge.jpeg", (err, d) ->
@@ -21,6 +24,8 @@ module.exports = (req, res) ->
 
     img     = new Canvas.Image
     img.src = d
+
+    ctx.addFont(new Font("comicSans", "#{__dirname}/../fonts/cs.ttf"))
 
     ctx.drawImage img, 0, 0, config.width, config.height
 
