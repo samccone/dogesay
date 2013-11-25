@@ -37,7 +37,7 @@ formatMessage = (message) ->
   hold      = []
   formatted = []
   removeExtension(message).forEach (w) ->
-    hold.push w
+    hold.push decodeURI(w)
     if hold.length % config.wordsPerLine is 0
       formatted.push(hold.join(" "))
       hold = []
