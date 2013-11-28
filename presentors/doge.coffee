@@ -8,6 +8,7 @@ config =
   wordsPerLine: 2
   lineHeight: 0
   lineIndents: [0, .15, .40, .10, 0, .30]
+  colors: ["#dd7c5c", "#000", "#cdd156", "#7a9fba", "#b996ae"]
   width: 500
   height: 500
   fontFamily: "comicSans"
@@ -62,6 +63,7 @@ drawMessage = (messages) ->
       ctx.font = "#{config.fontSize - step}px #{config.fontFamily}"
       size     = ctx.measureText(m)
 
+    ctx.fillStyle = config.colors[~~(Math.random() * config.colors.length)]
     ctx.fillText m,
       config.lineIndents[i]*canvas.width,
       size.emHeightAscent + heightStack + config.lineHeight * ++i
