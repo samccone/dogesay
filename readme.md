@@ -1,6 +1,6 @@
 dogesay
 =========
-![](http://s3.amazonaws.com/i.jpg.to/l/6967)
+![](http://dogesay.com/wow//doge)
 #doge speaks
 
 ## Dev
