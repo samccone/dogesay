@@ -12,13 +12,19 @@ config =
   width: 500
   height: 500
   fontFamily: "comicSans"
+  doge: "#{__dirname}/../doge.jpeg"
 
 
 module.exports = (req, res) ->
 
   res.setHeader "content-type", "image/png"
 
-  fs.readFile __dirname+"/../doge.jpeg", (err, d) ->
+  if req.query.image == "dogecoin"
+    doge = "#{__dirname}/../dogecoin.png"
+
+  doge ||= config.doge
+
+  fs.readFile doge, (err, d) ->
     message = formatMessage(req.path.split("/").slice(1))
     canvas  = new Canvas(config.width, config.height)
     ctx     = canvas.getContext('2d')
