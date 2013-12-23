@@ -4,7 +4,7 @@ dogesay
 #doge speaks
 
 ## Dev
-```npm install -g roots@2.1.0```
+```npm install```
 
 ```node app```
 
