@@ -11,30 +11,35 @@ config =
   colors: ["#dd7c5c", "#000", "#cdd156", "#7a9fba", "#b996ae"]
   width: 680
   height: 510
-  maxwidth: 1280
-  maxheight: 960
+  maxsize: [1280,960]
   fontFamily: "comicSans"
-  doge: "#{__dirname}/../reallybigdoge.jpeg"
+images =
+  base: # default
+    name: 'reallybigdoge.jpeg'
+    size: [680,510]
+  dogecoin:
+    name: 'dogecoin.png'
+    size: [300,300]
+  dogeface:
+    name: 'doge.jpeg'
+    size: [264,264]
 
 
 module.exports = (req, res) ->
 
   res.setHeader "content-type", "image/png"
 
-  if req.query.image == "dogecoin"
-    doge = "#{__dirname}/../dogecoin.png"
-
-  doge ||= config.doge
+  doge = images[req.query.image] || images.base
 
   if /^\d+(?:x\d+)?$/i.test(req.query.size)
     [width,height] = req.query.size.split(/x/i)
-    width = Math.min(parseInt(width), config.maxwidth)
-    height = if height then Math.min(parseInt(height), config.maxheight) else width
+    width = Math.min(parseInt(width), config.maxsize[0])
+    height = if height then Math.min(parseInt(height), config.maxsize[1]) else width
 
-  width ||= config.width
-  height ||= config.height
+  width ||= doge.size[0]
+  height ||= doge.size[1]
 
-  fs.readFile doge, (err, d) ->
+  fs.readFile "#{__dirname}/../images/"+doge.name, (err, d) ->
     message = formatMessage(req.path.split("/").slice(1))
     canvas  = new Canvas(width, height)
     ctx     = canvas.getContext('2d')
