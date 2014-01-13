@@ -39,7 +39,10 @@ module.exports = (req, res) ->
   if /^\d+(?:x\d+)?$/i.test(req.query.size)
     [width,height] = req.query.size.split(/x/i)
     width = Math.min(parseInt(width), config.maxsize[0])
-    height = if height then Math.min(parseInt(height), config.maxsize[1]) else width
+    if height
+      height = Math.min(parseInt(height), config.maxsize[1])
+    else
+      height = width * (doge.size[1] / doge.size[0])
 
   width ||= doge.size[0]
   height ||= doge.size[1]
