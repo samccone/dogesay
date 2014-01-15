@@ -3,6 +3,11 @@ Canvas = require 'canvas'
 Font   = Canvas.Font
 canvas = null
 ctx    = null
+caopt  =
+  max: 500 * 1048576 # ~500M
+  length: (n) -> n.length
+  maxAge: 1000 * 60 * 60
+cache  = require('lru-cache')(caopt)
 config =
   fontSize: 100
   wordsPerLine: 2
@@ -11,43 +16,57 @@ config =
   colors: ["#dd7c5c", "#000", "#cdd156", "#7a9fba", "#b996ae"]
   width: 680
   height: 510
-  maxwidth: 1280
-  maxheight: 960
+  maxsize: [1280,960]
   fontFamily: "comicSans"
-  doge: "#{__dirname}/../reallybigdoge.jpeg"
+images =
+  base: # default
+    name: 'reallybigdoge.jpeg'
+    size: [680,510]
+  dogecoin:
+    name: 'dogecoin.png'
+    size: [300,300]
+  dogeface:
+    name: 'doge.jpeg'
+    size: [264,264]
 
 
 module.exports = (req, res) ->
 
   res.setHeader "content-type", "image/png"
 
-  if req.query.image == "dogecoin"
-    doge = "#{__dirname}/../dogecoin.png"
-
-  doge ||= config.doge
+  doge = images[req.query.image] || images.base
 
   if /^\d+(?:x\d+)?$/i.test(req.query.size)
     [width,height] = req.query.size.split(/x/i)
-    width = Math.min(parseInt(width), config.maxwidth)
-    height = if height then Math.min(parseInt(height), config.maxheight) else width
+    width = Math.min(parseInt(width), config.maxsize[0])
+    if height
+      height = Math.min(parseInt(height), config.maxsize[1])
+    else
+      height = width * (doge.size[1] / doge.size[0])
 
-  width ||= config.width
-  height ||= config.height
+  width ||= doge.size[0]
+  height ||= doge.size[1]
 
-  fs.readFile doge, (err, d) ->
-    message = formatMessage(req.path.split("/").slice(1))
-    canvas  = new Canvas(width, height)
-    ctx     = canvas.getContext('2d')
+  cachekey = [req.path,doge.name,width,height].join()
 
-    img     = new Canvas.Image
-    img.src = d
+  if cache.has(cachekey)
+    res.end(cache.get(cachekey))
+  else
+    fs.readFile "#{__dirname}/../images/"+doge.name, (err, d) ->
+      message = formatMessage(req.path.split("/").slice(1))
+      canvas  = new Canvas(width, height)
+      ctx     = canvas.getContext('2d')
 
-    ctx.addFont(new Font("comicSans", "#{__dirname}/../fonts/cs.ttf"))
+      img     = new Canvas.Image
+      img.src = d
 
-    ctx.drawImage img, 0, 0, width, height
+      ctx.addFont(new Font("comicSans", "#{__dirname}/../fonts/cs.ttf"))
 
-    drawMessage message
-    canvas.pngStream().pipe(res)
+      ctx.drawImage img, 0, 0, width, height
+
+      drawMessage message
+      cache.set(cachekey, canvas.toBuffer())
+      canvas.pngStream().pipe(res)
 
 removeExtension = (message) ->
   l = message.length - 1
