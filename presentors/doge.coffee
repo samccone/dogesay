@@ -28,6 +28,9 @@ images =
   dogeface:
     name: 'doge.jpeg'
     size: [264,264]
+  moon:
+    name: 'moon.jpg'
+    size: [1024,576]
 
 
 module.exports = (req, res) ->
