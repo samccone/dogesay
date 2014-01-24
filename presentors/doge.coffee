@@ -31,6 +31,9 @@ images =
   moon:
     name: 'moon.jpg'
     size: [1024,576]
+  bobsled:
+    name: 'bobsled.jpeg'
+    size: [1024,768]
 
 
 module.exports = (req, res) ->
