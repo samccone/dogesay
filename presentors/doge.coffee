@@ -4,7 +4,7 @@ Font   = Canvas.Font
 canvas = null
 ctx    = null
 caopt  =
-  max: 500 * 1024 # ~500M
+  max: 500 * 1048576 # ~500M
   length: (n) -> n.length
   maxAge: 1000 * 60 * 60
 cache  = require('lru-cache')(caopt)
